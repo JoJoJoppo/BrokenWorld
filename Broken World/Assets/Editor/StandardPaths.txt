@@ -1,0 +1,3 @@
+#Standard folders that should be generated on load
+
+Assets/Game/Sprites/Tilesets

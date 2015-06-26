@@ -44,8 +44,13 @@ namespace BrokenWorld.WorldEditor
         const int PREVIEW_TILESET_SIZE = 275;
         Texture2D texture;
 
+        const string STANDARD_FOLDER_FILE = @"Assets/Editor/StandardPaths.txt";
+         
         void OnEnable()
         {
+            EditorFunctions.GenerateFolderHierarchy(File.ReadAllLines(STANDARD_FOLDER_FILE));       
+            
+             
             ActiveTileIndexX = 0;
             ActiveTileIndexY = 0;
 
@@ -80,8 +85,11 @@ namespace BrokenWorld.WorldEditor
             _textureName = "";
             _currentTab = 1;
             _targetSprite = "Assets/Game/Sprites/chipset01.png";
+
+
+             
             
-            
+                
         }
 
         public void OnGUI()

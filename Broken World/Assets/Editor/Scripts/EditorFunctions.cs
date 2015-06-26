@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+
 namespace BrokenWorld
 {
 
@@ -214,5 +215,55 @@ namespace BrokenWorld
             }
             return rotColors;
         }
+
+        /// <summary>
+        /// Create the folders that doesnt exist in path
+        /// </summary>
+        /// <param name="path">Choosen path that is going to get checked, the Root must be Assets in the projekt</param>
+        public static void GenerateFolderHierarchy(string path)
+        {
+            //if the whole path doesnt exists 
+            if (!AssetDatabase.IsValidFolder(path))
+            {
+                string[] folders = path.Split('/');
+                string currentFullPath = @"Assets";
+
+                if (folders.Length > 0)
+                {
+                    if (folders[0].ToLower() == "assets")
+                    {
+                        for (int x = 1; x < folders.Length; x++)
+                        {
+                            if (!AssetDatabase.IsValidFolder(currentFullPath + "/" + folders[x]))
+                                AssetDatabase.CreateFolder(currentFullPath, folders[x]);
+
+                            currentFullPath += "/" + folders[x];
+                        }
+
+                    }
+                    else
+                    {
+                        Debug.LogError("GenerateFolderHierarchy: Incorrect Root: " + path);
+                    }
+                }
+                else 
+                {
+                    Debug.LogError("GenerateFolderHierarchy: Incorrect path format, every folder must be derived by '/'");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create the patt that doesnt exist in the paths
+        /// </summary>
+        /// <param name="paths"></param>
+        public static void GenerateFolderHierarchy(string[] paths)
+        {
+            foreach (string path in paths)
+                if (path != "" && !path.Contains("#"))
+                    GenerateFolderHierarchy(path);
+        }
+
+       
     }
 }
