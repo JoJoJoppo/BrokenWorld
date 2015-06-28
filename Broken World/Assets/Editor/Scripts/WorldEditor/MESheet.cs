@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Audio;
 using UnityEditor;
 using System.Collections;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace BrokenWorld.WorldEditor
 
     public partial class MapEditorWindow
     {
-
+        
        
 
         private void DisplayMapEditor()
@@ -82,6 +83,18 @@ namespace BrokenWorld.WorldEditor
             }
             GUI.enabled = oldEnabled;
             GUILayout.FlexibleSpace();
+
+            MasterMixerControl.masterMixer = EditorGUILayout.ObjectField("Target mixer", MasterMixerControl.masterMixer, typeof(AudioMixer), true) as AudioMixer;
+
+            AudioTestVol = Mathf.Clamp(EditorGUILayout.FloatField("AudioVolume", AudioTestVol), -80, 20);
+            if (MasterMixerControl.masterMixer != null)
+                MasterMixerControl.SetMusicVol(AudioTestVol);
+
+
+            MasterMixerControl.Drunk = EditorGUILayout.Toggle("Drunkness Active: ", MasterMixerControl.Drunk);
+            
+            MasterMixerControl.PlayDrunknes();
+
             //ToDo
             //Skapa en box som går att scrolla som innehållar alla slices av ett tileset 
 

@@ -45,14 +45,20 @@ namespace BrokenWorld.WorldEditor
         Texture2D texture;
 
         const string STANDARD_FOLDER_FILE = @"Assets/Editor/StandardPaths.txt";
-         
+
+
+        float AudioTestVol;
+
         void OnEnable()
         {
-            EditorFunctions.GenerateFolderHierarchy(File.ReadAllLines(STANDARD_FOLDER_FILE));       
-            
-             
+            EditorFunctions.GenerateFolderHierarchy(File.ReadAllLines(STANDARD_FOLDER_FILE));
+
+            AudioTestVol = 0;
+            MasterMixerControl.Drunk = false;
+
             ActiveTileIndexX = 0;
             ActiveTileIndexY = 0;
+
 
             texture = new Texture2D(250,250);
             List<string> result = new List<string>();

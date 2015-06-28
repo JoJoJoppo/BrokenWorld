@@ -11,4 +11,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d888c786d137a0e4bbb49ae32e8b842b, type: 3}
   m_Name: bwWeaponDatabase
   m_EditorClassIdentifier: 
-  database: []
+  database:
+  - _name: Knife
+    _value: 4
+    _icon: {fileID: 0}
+    _burden: 6
+    _quality:
+      _name: Common
+      _icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+    _minDamage: 9
+    _durability: 10
+    _maxDurability: 10
+    _prefab: {fileID: 0}
+    equipmentSlot: 3

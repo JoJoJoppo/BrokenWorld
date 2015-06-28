@@ -1,3 +1,13 @@
-#Standard folders that should be generated on load
+#Standard folders that should be generated on load if they don't already exist
+
+Assets/Game/Scripts
+Assets/Game/Scripts/Interfaces
+
+Assets/Game/Sounds
+Assets/Game/Sounds/Music
+Assets/Game/Sounds/FX
 
 Assets/Game/Sprites/Tilesets
+Assets/Game/Sprites/GUI
+Assets/Game/Sprites/Characters
+Assets/Game/Sprites/Items
