@@ -7,8 +7,6 @@ namespace BrokenWorld
     public static class MasterMixerControl
     {
         public static AudioMixer masterMixer;
-        public static bool Drunk;
-
 
         public static void SetMaserVol(float volume)
         {
@@ -28,27 +26,34 @@ namespace BrokenWorld
                 masterMixer.SetFloat("MusicVol", volume);
         }
 
-        public static void PlayDrunknes()
+        public static void SetDialogPitch(float pitch)
+        { 
+             if (masterMixer != null)
+                 masterMixer.SetFloat("DialogPitch", pitch);
+        }
+
+        public static void PlayDrunknes(bool drunkActive)
         {
             if (masterMixer != null)
             {
-                if (Drunk)
+                if (drunkActive)
                 {
-                    Debug.Log("Drunk!");
-                    masterMixer.SetFloat("MusicVol", 5);
-                    masterMixer.SetFloat("MusicPitch", 0.60f);
-                    masterMixer.SetFloat("MusicDryMix", 0.57f);
-                    masterMixer.SetFloat("MusicWetMix", 0.42f);
+                    masterMixer.SetFloat("MasterVol", 5);
+                    masterMixer.SetFloat("MasterPitch", 0.80f);
+                    masterMixer.SetFloat("MasterDryMix", 0.57f);
+                    masterMixer.SetFloat("MasterWetMix", 0.42f);
                 }
                 else
                 {
-                    Debug.Log("Sober...");
-                    masterMixer.SetFloat("MusicVol", 0);
-                    masterMixer.SetFloat("MusicPitch", 1);
-                    masterMixer.SetFloat("MusicDryMix", 1);
-                    masterMixer.SetFloat("MusicWetMix", 0);
-                    
+                    masterMixer.SetFloat("MasterVol", 0);
+                    masterMixer.SetFloat("MasterPitch", 1);
+                    masterMixer.SetFloat("MasterDryMix", 1);
+                    masterMixer.SetFloat("MasterWetMix", 0);
                 }
+            }
+            else
+            {
+                Debug.LogError("MasterMixer not fetched");
             }
 
            

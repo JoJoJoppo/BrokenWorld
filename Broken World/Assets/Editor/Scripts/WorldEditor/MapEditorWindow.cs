@@ -47,14 +47,13 @@ namespace BrokenWorld.WorldEditor
         const string STANDARD_FOLDER_FILE = @"Assets/Editor/StandardPaths.txt";
 
 
-        float AudioTestVol;
+        
 
         void OnEnable()
         {
             EditorFunctions.GenerateFolderHierarchy(File.ReadAllLines(STANDARD_FOLDER_FILE));
 
-            AudioTestVol = 0;
-            MasterMixerControl.Drunk = false;
+            
 
             ActiveTileIndexX = 0;
             ActiveTileIndexY = 0;
