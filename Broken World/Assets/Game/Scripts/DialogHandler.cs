@@ -64,7 +64,7 @@ namespace BrokenWorld
 
         public void ReadDialog() 
         {
-            float[] pitchSets = { 1, 0.95f, 0.93f, 0.88f, 1, 0.95f, 0.90f, 0.85f, 1.25f };
+            float[] pitchSets = { 1, 0.95f, 0.93f, 0.96f, 1, 0.95f, 0.98f, 0.94f, 1.10f };
 
 
             if (dialogPlaying)
