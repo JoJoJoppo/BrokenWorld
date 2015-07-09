@@ -11,40 +11,33 @@ namespace BrokenWorld
     public class DialogHandler : MonoBehaviour 
     {
         
-
-        Text instruction;
-        string fullDialogTemp ="";
-        string fullDialogOriginal = "";
-        int dialogIndex;
-        float tickLength = 1;
-        float _scale;
-        float roundTimeLeft;
-        float startTime;
-        float[] pitchSets = { 1, 0.95f, 0.90f, 0.85f, 1, 0.95f, 0.90f, 0.85f, 1.25f };
-
         [Range(-0.6f, 0.6f)]
         public float basePitchMod;
 
-        [Range(0.005f,3)]
-        public float roundTimeLength = 0.070f;//360f / 60f;
+        [Range(0.005f, 3)]
+        public float RoundTimeLength = 0.07f;
+        public bool Loop;
+        public string fullDialogOriginal = "";
+        
+        private float roundTimeLeft;
+        private float startTime;
+        private int dialogIndex;
+        private Text instruction;
+        private AudioSource blipPlayer;
+        private AudioClip clip;
+        private char currentChar;
+        private string currentCommand;
+        private string currentCommandParameter;
+        private bool dialogPlaying;
 
-        AudioSource blipPlayer;
-        AudioClip clip;
-
-        const char COMMAND_CHARACTER = '#';
-        char currentChar;
-        string currentCommand;
-        string currentCommandParameter;
-	    // Use this for initialization
-        bool dialogPaused;
-
-        const string READ_FROM_FILE_TEST = @"Assets/Game/Dialog.txt";
+        private const char COMMAND_START_CHARACTER = '[';
 
         void Start ()
         {
-            fullDialogOriginal = File.ReadAllLines(READ_FROM_FILE_TEST)[0];
-            fullDialogTemp = fullDialogOriginal;
-            dialogPaused = false;
+            Loop = false;
+            fullDialogOriginal = "[S(0.07)]What happend? [PAUSE][S(0.08)]He is [S(1)]dead[S(0.07)]...";
+
+            dialogPlaying = true;
             currentCommand = "";
             currentCommandParameter = "";
             blipPlayer = gameObject.GetComponent<AudioSource>();
@@ -69,42 +62,80 @@ namespace BrokenWorld
 
         }
 
-        private void ReadDialog() 
+        public void ReadDialog() 
         {
+            float[] pitchSets = { 1, 0.95f, 0.93f, 0.88f, 1, 0.95f, 0.90f, 0.85f, 1.25f };
 
-            if (dialogIndex < fullDialogTemp.Length)
+
+            if (dialogPlaying)
             {
-                roundTimeLeft = Time.time - startTime;
-                if (roundTimeLeft >= roundTimeLength)
+                if (dialogIndex < fullDialogOriginal.Length)
                 {
-                    startTime = Time.time;
-                    roundTimeLeft = 0;
-
-                    instruction.text = fullDialogTemp.Substring(0, dialogIndex);
-                    currentChar = fullDialogTemp[dialogIndex];
-
-                    if (currentChar == COMMAND_CHARACTER)
+                    roundTimeLeft = Time.time - startTime;
+                    if (roundTimeLeft >= RoundTimeLength)
                     {
-                        FetchDialogCommand(dialogIndex, out currentCommand, out currentCommandParameter);
-                        HandleDialogCommand(currentCommand, currentCommandParameter);
+                        startTime = Time.time;
+                        roundTimeLeft = 0;
+
+                        currentChar = fullDialogOriginal[dialogIndex];
+
+                        if (currentChar == COMMAND_START_CHARACTER)
+                        {
+                            FetchDialogCommand(dialogIndex, out currentCommand, out currentCommandParameter);
+                            HandleDialogCommand(currentCommand, currentCommandParameter);
+
+                            dialogIndex += currentCommand.Length + 1;
+
+                            if (currentCommandParameter.Length > 0)
+                                dialogIndex += currentCommandParameter.Length + 2;
+                        }
+                        else if (currentChar == ' ')
+                        {
+                            instruction.text += currentChar;
+                        }
+                        else
+                        {
+                            instruction.text += currentChar;
+                            MasterMixerControl.SetDialogPitch(pitchSets[Mathf.RoundToInt(UnityEngine.Random.Range(0, pitchSets.Length))] + basePitchMod);
+                            blipPlayer.PlayOneShot(clip);
+                        }
+
+                        dialogIndex++;
                     }
-                    else if (currentChar == ' ') { /*Do nothing*/ }
-                    else
-                    {
-                        MasterMixerControl.SetDialogPitch(pitchSets[Mathf.RoundToInt(UnityEngine.Random.Range(0, pitchSets.Length))] + basePitchMod);
-                        blipPlayer.PlayOneShot(clip);
-                    }
-                    
-                    dialogIndex++;
+                }
+                else if (Loop)
+                {
+                    ResettDialog();
                 }
             }
-            else
+            else 
             {
-                fullDialogTemp = fullDialogOriginal;
-                dialogIndex = 0;
-                startTime = 0;
+                if (Input.GetKeyDown("space"))
+                    dialogPlaying = true;
             }
+        }
 
+        public void SkippDialog()
+        {
+
+
+        }
+
+        public void PlayDialog()
+        {
+            dialogPlaying = true;
+        }
+
+        public void PauseDialog()
+        {
+            dialogPlaying = false;
+        }
+
+        public void ResettDialog()
+        {
+            instruction.text = "";
+            dialogIndex = 0;
+            startTime = 0;
         }
 
         private void FetchDialogCommand(int currentIndex, out string command, out string parameter)
@@ -115,23 +146,16 @@ namespace BrokenWorld
             int parameterLength = 0;
             int parameterStart = 0;
 
-            if (fullDialogTemp[currentIndex + 1] == '[')
-            {
-                commandLength = fullDialogTemp.IndexOf(']', currentIndex + 2) - currentIndex ;                
-                command = fullDialogTemp.Substring(currentIndex + 2, commandLength - 2);
-                fullDialogTemp = fullDialogTemp.Remove(currentIndex, commandLength+1);
+            commandLength = fullDialogOriginal.IndexOf(']', currentIndex + 1) - currentIndex;
+            command = fullDialogOriginal.Substring(currentIndex + 1, commandLength - 1);
                 
-                if (command.Contains("(") && command.Contains(")"))
-                {
-                    parameterStart = command.IndexOf('(');
-                    parameterLength = command.Length - parameterStart - 2;
-                    parameter = command.Substring(parameterStart + 1, parameterLength);
-                    command = command.Substring(0, parameterStart);
-                }
-                currentIndex--;
+            if (command.Contains("(") && command.Contains(")"))
+            {
+                parameterStart = command.IndexOf('(');
+                parameterLength = command.Length - parameterStart - 2;
+                parameter = command.Substring(parameterStart + 1, parameterLength);
+                command = command.Substring(0, parameterStart);
             }
-            else
-                Debug.LogError("Incorrect Start of Command");
 
         }
 
@@ -148,26 +172,40 @@ namespace BrokenWorld
 
             switch (command.ToUpper())
             { 
+                case "S":   //Read speed
+                    if (parameter != "")
+                    {
+                        RoundTimeLength = float.Parse(parameter);
+                    }
+                    else
+                        Debug.LogError("HandleDialogCommand: The " + command + " command require a parameter");
+                    break;
+
                 case "DRUNK":
                     if (parameter != "")
+                    {
                         drunkActive = Boolean.Parse(parameter);
+
+                        if (drunkActive)
+                            RoundTimeLength = 0.09f;
+                        else
+                            RoundTimeLength = 0.07f;
+
+                        MasterMixerControl.PlayDrunknes(drunkActive);
+                    }
+                        
                     else
-                        Debug.LogError("The " + command + " command require a parameter");
+                        Debug.LogError("HandleDialogCommand: The " + command + " command require a parameter");
 
                     break;
 
                 case "PAUSE": 
-                    if (parameter != "")
-                    {
-                        Debug.Log("Pausat i " + parameter);
-                    }
-                    else
-                        Debug.LogError("The " + command + " command require a parameter");
+                    dialogPlaying = false;
+
                     break;
 
                 case "CLEAR":
-                    fullDialogTemp = fullDialogTemp.Remove(0, dialogIndex-1);
-                    dialogIndex = 0; 
+                    instruction.text = "";
                     break;
 
                 case "CAMERA_SHAKE":
@@ -180,7 +218,7 @@ namespace BrokenWorld
                         Debug.Log("Set left portrait");
                     }
                     else
-                        Debug.LogError("The " + command + " command require a parameter");
+                        Debug.LogError("HandleDialogCommand: The " + command + " command require a parameter");
                     break;
 
                 case "SET_RIGHT_ACTIVE":
@@ -189,30 +227,20 @@ namespace BrokenWorld
                         Debug.Log("Set right portrait");
                     }
                     else
-                        Debug.LogError("The " + command + " command require a parameter");
+                        Debug.LogError("HandleDialogCommand: The " + command + " command require a parameter");
                     break;
 
                 default:
-                    Debug.LogError("Unknown dialog: " + command);
+                    Debug.LogError(" HandleDialogCommand: Unknown dialog: " + command);
                     break;
             }
 
-            MasterMixerControl.PlayDrunknes(drunkActive);
+            
            
         }
 
-        public void SkippDialog()
-        {
-            if (dialogIndex == fullDialogTemp.Length)
-            { 
-                //Exit dialog or go to next state
-            }
-            else
-            {
-                dialogIndex = fullDialogTemp.Length;
-            }
-           
-        }
+        
 
+        
     }
 }
