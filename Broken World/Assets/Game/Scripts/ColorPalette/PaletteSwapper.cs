@@ -1,42 +1,68 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PaletteSwapper : MonoBehaviour {
+namespace BrokenWorld.ColorPalette
+{
 
-    public SpriteRenderer spriteRenderer;
-    public Color[] palettes;
-
-    private Texture2D texture;
-    private Texture2D cloneTexture;
-    private MaterialPropertyBlock block;
-
-    void Awake()
+    [RequireComponent(typeof(SpriteRenderer))]
+    public class PaletteSwapper : MonoBehaviour
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        public SpriteRenderer spriteRenderer;
+        public Palette[] palettes;
+        private Texture2D texture;
+        private MaterialPropertyBlock block;
 
+        void Awake()
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        // Use this for initialization
+        void Start()
+        {
+
+            if (palettes.Length > 0)
+                SwapColors(palettes[Random.Range(0, palettes.Length)]);
+
+        }
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
+        void LateUpdate()
+        {
+            spriteRenderer.SetPropertyBlock(block);
+        }
+
+        private void SwapColors(Palette palette)
+        {
+
+            if (palette.CachedTexture == null)
+            {
+
+                texture = spriteRenderer.sprite.texture;
+
+                var cloneTexture = new Texture2D(texture.width, texture.height);
+                cloneTexture.wrapMode = TextureWrapMode.Clamp;
+                cloneTexture.filterMode = FilterMode.Point;
+
+                var colors = texture.GetPixels();
+
+                for (int i = 0; i < colors.Length; i++)
+                {
+                    colors[i] = palette.GetColor(colors[i]);
+                }
+
+                cloneTexture.SetPixels(colors);
+                cloneTexture.Apply();
+
+                palette.CachedTexture = cloneTexture;
+            }
+
+            block = new MaterialPropertyBlock();
+            block.AddTexture("_MainTex", palette.CachedTexture);
+        }
     }
-
-
-
-	// Use this for initialization
-	void Start () {
-        texture = spriteRenderer.sprite.texture;
-
-        var w = texture.width;
-        var h = texture.height;
-
-        cloneTexture = new Texture2D(w, h);
-        cloneTexture.wrapMode = TextureWrapMode.Clamp;
-        cloneTexture.filterMode = FilterMode.Point;
-
-        Color[] pixels = texture.GetPixels();
-        cloneTexture.SetPixels(pixels);
-        cloneTexture.Apply();
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

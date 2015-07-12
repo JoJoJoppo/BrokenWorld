@@ -1,4 +1,119 @@
-﻿//using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
+using UnityEditor;
+
+namespace BrokenWorld.Editors.NodeEditor
+{
+
+    public class ComparisonNode : BaseInputNode
+    {
+
+        private ComparisonType _comparisonType;
+
+        public enum ComparisonType
+        {
+            Greater,
+            Less,
+            Equal
+        }
+
+        private string compareText = "";
+
+        public ComparisonNode()
+        {
+            WindowTitle = "Comparison Node";
+            HasInputs = true;
+        }
+
+        public override void DrawWindow()
+        {
+            base.DrawWindow();
+
+            Event e = Event.current;
+            _comparisonType = (ComparisonType)EditorGUILayout.EnumPopup("Comparison Type", _comparisonType);
+
+            string input1Title = "None";
+
+            if (Input1)
+            {
+                input1Title = Input1.GetResult();
+            }
+
+            //draw a label
+            GUILayout.Label("Input 1: " + input1Title);
+
+            //same as before
+            if (e.type == EventType.Repaint)
+            {
+                Input1Rect = GUILayoutUtility.GetLastRect();
+
+            }
+
+            string input2Title = "None";
+
+            if (Input2)
+            {
+                input2Title = Input2.GetResult();
+            }
+
+            GUILayout.Label("Input 2: " + input2Title);
+
+            if (e.type == EventType.Repaint)
+            {
+                Input2Rect = GUILayoutUtility.GetLastRect();
+
+            }
+        }
+
+        public override string GetResult()
+        {
+            float input1Value = 0;
+            float input2Value = 0;
+
+            if (Input1)
+            {
+                string input1Raw = Input1.GetResult();
+                float.TryParse(input1Raw, out input1Value);
+            }
+
+            if (Input2)
+            {
+                string input2Raw = Input2.GetResult();
+                float.TryParse(input2Raw, out input2Value);
+            }
+
+            string result = "false";
+
+            switch (_comparisonType)
+            {
+                case ComparisonType.Equal:
+                    if (input1Value == input2Value)
+                    {
+                        result = "true";
+                    }
+                    break;
+                case ComparisonType.Greater:
+                    if (input1Value > input2Value)
+                    {
+                        result = "true";
+                    }
+                    break;
+                case ComparisonType.Less:
+                    if (input1Value < input2Value)
+                    {
+                        result = "true";
+                    }
+                    break;
+            }
+
+            return result;
+        }
+
+    }
+
+}
+
+//using UnityEngine;
 //using UnityEditor;
 //using System.Collections;
 
@@ -120,116 +235,6 @@
 
 
 //}
-
-using UnityEngine;
-using System.Collections;
-using UnityEditor;
-
-public class ComparisonNode : BaseInputNode
-{
-
-    private ComparisonType _comparisonType;
-
-    public enum ComparisonType
-    {
-        Greater,
-        Less,
-        Equal
-    }
-
-    private string compareText = "";
-
-    public ComparisonNode()
-    {
-        WindowTitle = "Comparison Node";
-        HasInputs = true;
-    }
-
-    public override void DrawWindow()
-    {
-        base.DrawWindow();
-
-        Event e = Event.current;
-        _comparisonType = (ComparisonType)EditorGUILayout.EnumPopup("Comparison Type", _comparisonType);
-
-        string input1Title = "None";
-
-        if (Input1)
-        {
-            input1Title = Input1.GetResult();
-        }
-
-        //draw a label
-        GUILayout.Label("Input 1: " + input1Title);
-
-        //same as before
-        if (e.type == EventType.Repaint)
-        {
-            Input1Rect = GUILayoutUtility.GetLastRect();
-
-        }
-
-        string input2Title = "None";
-
-        if (Input2)
-        {
-            input2Title = Input2.GetResult();
-        }
-
-        GUILayout.Label("Input 2: " + input2Title);
-
-        if (e.type == EventType.Repaint)
-        {
-            Input2Rect = GUILayoutUtility.GetLastRect();
-
-        }
-    }
-
-    public override string GetResult()
-    {
-        float input1Value = 0;
-        float input2Value = 0;
-
-        if (Input1)
-        {
-            string input1Raw = Input1.GetResult();
-            float.TryParse(input1Raw, out input1Value);
-        }
-
-        if (Input2)
-        {
-            string input2Raw = Input2.GetResult();
-            float.TryParse(input2Raw, out input2Value);
-        }
-
-        string result = "false";
-
-        switch (_comparisonType)
-        {
-            case ComparisonType.Equal:
-                if (input1Value == input2Value)
-                {
-                    result = "true";
-                }
-                break;
-            case ComparisonType.Greater:
-                if (input1Value > input2Value)
-                {
-                    result = "true";
-                }
-                break;
-            case ComparisonType.Less:
-                if (input1Value < input2Value)
-                {
-                    result = "true";
-                }
-                break;
-        }
-
-        return result;
-    }
-
-}
 
 
 

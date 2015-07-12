@@ -264,6 +264,26 @@ namespace BrokenWorld
                     GenerateFolderHierarchy(path);
         }
 
+        /// <summary>
+        /// Generate an scriptable object on choosen path, and return the asset
+        /// </summary>
+        /// <typeparam name="T">object type</typeparam>
+        /// <param name="path"></param>
+        /// <returns>s</returns>
+        public static T CreateAsset<T>(string path) where T : ScriptableObject
+        {
+            T asset = null;
+
+            asset = ScriptableObject.CreateInstance<T>();
+
+            var newPath = AssetDatabase.GenerateUniqueAssetPath(path);
+
+            AssetDatabase.CreateAsset(asset, newPath);
+
+            AssetDatabase.SaveAssets();
+
+            return asset;
+        }
        
     }
 }

@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections;
 
-namespace BrokenWorld.EnvironmentSystem
+namespace BrokenWorld.Editors.EnvironmentSystem
 {
     public class EnvironmentEditor : EditorWindow
     {

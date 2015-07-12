@@ -5,7 +5,7 @@ using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 
-namespace BrokenWorld.WorldEditor
+namespace BrokenWorld.Editors.MapEditor
 { 
 
     public partial class MapEditorWindow : EditorWindow

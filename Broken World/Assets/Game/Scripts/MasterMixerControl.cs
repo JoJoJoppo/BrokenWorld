@@ -2,7 +2,7 @@
 using UnityEngine.Audio;
 using System.Collections;
 
-namespace BrokenWorld
+namespace BrokenWorld.MasterMixer
 {
     public static class MasterMixerControl
     {

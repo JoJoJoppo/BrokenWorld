@@ -11,10 +11,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a3fbcc148313947b670faa4cad7850, type: 3}
   m_Name: bwQualityDatabase
   m_EditorClassIdentifier: 
-  database:
-  - _name: Common
-    _icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  - _name: Uncommon
-    _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  - _name: Rare
-    _icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  database: []

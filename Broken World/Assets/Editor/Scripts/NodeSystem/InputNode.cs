@@ -2,57 +2,61 @@
 using UnityEditor;
 using System.Collections;
 
-public class InputNode : BaseInputNode 
+namespace BrokenWorld.Editors.NodeEditor
 {
-    
-    public enum InputType
-    { 
-        Number,
-        Randomization
-    }
 
-    private InputType _inputType;
-    private float randomFrom = 0;
-    private float randomTo = 0;
-    private string inputValue = "";
-
-    public InputNode()
+    public class InputNode : BaseInputNode
     {
-        WindowTitle = "Input Node";
-    }
 
-    public override void DrawWindow()
-    {
-        base.DrawWindow();
+        public enum InputType
+        {
+            Number,
+            Randomization
+        }
 
-        _inputType = (InputType)EditorGUILayout.EnumPopup("Input type: ", _inputType);
+        private InputType _inputType;
+        private float randomFrom = 0;
+        private float randomTo = 0;
+        private string inputValue = "";
 
-        switch (_inputType)
-        { 
-            case InputType.Number:
-                inputValue = EditorGUILayout.TextField("Value: ", inputValue);
-                break;
+        public InputNode()
+        {
+            WindowTitle = "Input Node";
+        }
 
-            case InputType.Randomization:
-                randomFrom = EditorGUILayout.FloatField("From", randomFrom);
-                randomTo = EditorGUILayout.FloatField("To", randomTo);
+        public override void DrawWindow()
+        {
+            base.DrawWindow();
 
-                if (GUILayout.Button("Calculate random"))
-                    inputValue = UnityEngine.Random.Range(randomFrom, randomTo).ToString();
-                break;
+            _inputType = (InputType)EditorGUILayout.EnumPopup("Input type: ", _inputType);
+
+            switch (_inputType)
+            {
+                case InputType.Number:
+                    inputValue = EditorGUILayout.TextField("Value: ", inputValue);
+                    break;
+
+                case InputType.Randomization:
+                    randomFrom = EditorGUILayout.FloatField("From", randomFrom);
+                    randomTo = EditorGUILayout.FloatField("To", randomTo);
+
+                    if (GUILayout.Button("Calculate random"))
+                        inputValue = UnityEngine.Random.Range(randomFrom, randomTo).ToString();
+                    break;
+            }
+
+        }
+
+        public override void DrawCurves()
+        {
+
+        }
+
+
+        public override string GetResult()
+        {
+            return inputValue;
         }
 
     }
-
-    public override void DrawCurves()
-    {
-
-    }
-
-   
-    public override string GetResult()
-    {
-        return inputValue;
-    }
-
 }

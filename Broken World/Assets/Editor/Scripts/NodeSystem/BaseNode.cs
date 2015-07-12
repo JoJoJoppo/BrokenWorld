@@ -2,27 +2,31 @@
 using UnityEditor;
 using System.Collections;
 
-public abstract class BaseNode : ScriptableObject 
+namespace BrokenWorld.Editors.NodeEditor
 {
-    public Rect WindowRect;
-    public bool HasInputs = false;
-    public string WindowTitle = "";
 
-    public virtual void DrawWindow() 
+    public abstract class BaseNode : ScriptableObject
     {
-        WindowTitle = EditorGUILayout.TextField("Title", WindowTitle);
+        public Rect WindowRect;
+        public bool HasInputs = false;
+        public string WindowTitle = "";
+
+        public virtual void DrawWindow()
+        {
+            WindowTitle = EditorGUILayout.TextField("Title", WindowTitle);
+
+        }
+
+        public abstract void DrawCurves();
+
+        public virtual void SetInput(BaseInputNode input, Vector2 clickPos) { }
+
+        public virtual void NodeDeleted(BaseNode node) { }
+
+        public virtual BaseInputNode ClickedOnInput(Vector2 pos)
+        {
+            return null;
+        }
 
     }
-
-    public abstract void DrawCurves();
-
-    public virtual void SetInput(BaseInputNode input, Vector2 clickPos){ }
-
-    public virtual void NodeDeleted(BaseNode node) { }
-
-    public virtual BaseInputNode ClickedOnInput(Vector2 pos)
-    {
-        return null;
-    }
-
 }

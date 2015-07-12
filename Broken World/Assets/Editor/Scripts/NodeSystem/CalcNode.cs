@@ -1,4 +1,97 @@
-﻿//using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
+using UnityEditor;
+
+namespace BrokenWorld.Editors.NodeEditor
+{
+
+    public class CalcNode : BaseInputNode
+    {
+        public enum CalculationType
+        {
+            Addition,
+            Subtraction,
+            Multiplication,
+            Division
+        }
+
+        private CalculationType _currentCalculationType;
+
+        public CalcNode()
+        {
+            WindowTitle = "Calculation Node";
+            HasInputs = true;
+        }
+
+        public override void DrawWindow()
+        {
+            base.DrawWindow();
+            Event e = Event.current;
+
+            _currentCalculationType = (CalculationType)EditorGUILayout.EnumPopup("Calculation Type: ", _currentCalculationType);
+
+            string input1Title = (Input1) ? Input1.GetResult() : "None";
+            string input2Title = (Input2) ? Input2.GetResult() : "None";
+
+            GUILayout.Label("Input 1: " + input1Title);
+
+            if (e.type == EventType.Repaint)
+            {
+                Input1Rect = GUILayoutUtility.GetLastRect();
+            }
+
+
+            GUILayout.Label("Input 2: " + input2Title);
+
+            if (e.type == EventType.Repaint)
+            {
+                Input2Rect = GUILayoutUtility.GetLastRect();
+            }
+
+        }
+
+
+        public override string GetResult()
+        {
+            float input1Value = 0;
+            float input2Value = 0;
+
+            if (Input1)
+            {
+                string input1Raw = Input1.GetResult();
+                float.TryParse(input1Raw, out input1Value);
+            }
+
+            if (Input2)
+            {
+                string input2Raw = Input2.GetResult();
+                float.TryParse(input2Raw, out input2Value);
+            }
+
+
+            switch (_currentCalculationType)
+            {
+                case CalculationType.Addition:
+                    return (input1Value + input2Value).ToString();
+                case CalculationType.Division:
+                    return (input1Value / input2Value).ToString();
+                case CalculationType.Multiplication:
+                    return (input1Value * input2Value).ToString();
+                case CalculationType.Subtraction:
+                    return (input1Value - input2Value).ToString();
+                default:
+                    return "";
+            }
+        }
+
+
+
+
+    }
+
+}
+
+//using UnityEngine;
 //using UnityEditor;
 //using System.Collections;
 
@@ -154,94 +247,6 @@
 //            input2 = null;
 //    }
 //}
-using UnityEngine;
-using System.Collections;
-using UnityEditor;
-
-public class CalcNode : BaseInputNode
-{
-    public enum CalculationType
-    {
-        Addition,
-        Subtraction,
-        Multiplication,
-        Division
-    }
-
-    private CalculationType _currentCalculationType;
-
-    public CalcNode()
-    {
-        WindowTitle = "Calculation Node";
-        HasInputs = true;
-    }
-
-    public override void DrawWindow()
-    {
-        base.DrawWindow();
-        Event e = Event.current;
-
-        _currentCalculationType = (CalculationType)EditorGUILayout.EnumPopup("Calculation Type: ", _currentCalculationType);
-
-        string input1Title = (Input1) ? Input1.GetResult() : "None";
-        string input2Title = (Input2) ? Input2.GetResult() : "None";
-
-        GUILayout.Label("Input 1: " + input1Title);
-
-        if (e.type == EventType.Repaint)
-        {
-            Input1Rect = GUILayoutUtility.GetLastRect();
-        }
-
-
-        GUILayout.Label("Input 2: " + input2Title);
-
-        if (e.type == EventType.Repaint)
-        {
-            Input2Rect = GUILayoutUtility.GetLastRect();
-        }
-
-    }
-
- 
-    public override string GetResult()
-    {
-        float input1Value = 0;
-        float input2Value = 0;
-
-        if (Input1)
-        {
-            string input1Raw = Input1.GetResult();
-            float.TryParse(input1Raw, out input1Value);
-        }
-
-        if (Input2)
-        {
-            string input2Raw = Input2.GetResult();
-            float.TryParse(input2Raw, out input2Value);
-        }
-
-
-        switch (_currentCalculationType)
-        {
-            case CalculationType.Addition:
-                return (input1Value + input2Value).ToString();
-            case CalculationType.Division:
-                return (input1Value / input2Value).ToString();
-            case CalculationType.Multiplication:
-                return (input1Value * input2Value).ToString();
-            case CalculationType.Subtraction:
-                return (input1Value - input2Value).ToString();
-            default:
-                return "";
-        }
-    }
-
-    
-
-    
-}
-
 
 
 

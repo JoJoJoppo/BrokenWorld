@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections;
 using System.Linq;
 
-namespace BrokenWorld.WorldEditor
+namespace BrokenWorld.Editors.MapEditor
 {
 
     public partial class MapEditorWindow
