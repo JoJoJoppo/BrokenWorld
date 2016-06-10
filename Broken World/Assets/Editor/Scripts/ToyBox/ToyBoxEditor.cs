@@ -4,13 +4,12 @@ using UnityEngine.Audio;
 using System.Collections;
 using BrokenWorld.MasterMixer;
 
-namespace BrokenWorld
+namespace BrokenWorld.ToyBox
 {
 
     public class ToyBoxEditor : EditorWindow
     {
         float AudioTestVol;
-        string fullDialog, subDialog;
         bool drunkActive;
 
         [MenuItem("BrokenWorld/Toy Box")]
@@ -24,10 +23,6 @@ namespace BrokenWorld
         {
             drunkActive = false;
             AudioTestVol = 0;
- 
-
-            fullDialog = "Hello";
-            subDialog = "";
         }
 
         public void OnGUI()
@@ -36,11 +31,9 @@ namespace BrokenWorld
 
             GUILayout.Space(25);
 
-            DialogTest();
-            
         }
 
-        private void AudioControlTest() 
+        private void AudioControlTest()
         {
             MasterMixerControl.masterMixer = EditorGUILayout.ObjectField("Target mixer", MasterMixerControl.masterMixer, typeof(AudioMixer), true) as AudioMixer;
 
@@ -54,11 +47,5 @@ namespace BrokenWorld
             MasterMixerControl.PlayDrunknes(drunkActive);
         }
 
-        private void DialogTest()
-        {
-            
-
-        }
     }
-
 }
