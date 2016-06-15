@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Lux Snow
+  m_Shader: {fileID: 4800000, guid: 71b4aec55f1bd403d860524f3cf24a1f, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 194170b3b39c640a9b08439aae000428, type: 3}
+          m_Scale: {x: 2, y: 2}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: cf16869a50dac4c4db94b080fa1d1d1a, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _CombinedMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 9e7cb149979c14da79d33d1dd9248433, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _HeightMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 9e7cb149979c14da79d33d1dd9248433, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _SnowAlbedo
+        second:
+          m_Texture: {fileID: 2800000, guid: ff2d80497d59a449d98d4f2944d18f04, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _SnowBump
+        second:
+          m_Texture: {fileID: 2800000, guid: 7d62aca62291d4e0ab4a600172a3b1a6, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _SnowHeight
+        second:
+          m_Texture: {fileID: 2800000, guid: a284e9d324dee477395544bccbfe73a8, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Wind
+        second: 1
+      data:
+        first:
+          name: _Parallax
+        second: 0.035
+      data:
+        first:
+          name: _TextureSize
+        second: 1024
+      data:
+        first:
+          name: _AOMapInfluence
+        second: 1
+      data:
+        first:
+          name: _HeightMapInfluence
+        second: 1
+      data:
+        first:
+          name: _SnowSize
+        second: 1
+      data:
+        first:
+          name: _BumpBias
+        second: 4
+      data:
+        first:
+          name: _SnowAmount
+        second: 1
+      data:
+        first:
+          name: _RimPower
+        second: 2
+      data:
+        first:
+          name: _SnowIcyness
+        second: 0.345
+      data:
+        first:
+          name: _SnowThickness
+        second: 0.838
+      data:
+        first:
+          name: _CombinedMapInfluence
+        second: 1
+    m_Colors: {}
